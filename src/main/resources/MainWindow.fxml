@@ -1,0 +1,36 @@
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.layout.HBox?>
+<?import ru.kpfu.ildar.FileTable?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.MenuItem?>
+<GridPane xmlns:fx="http://javafx.com/fxml" fx:controller="ru.kpfu.ildar.Controller"
+        hgap="10" vgap="10">
+    <columnConstraints>
+        <ColumnConstraints percentWidth="49" />
+        <ColumnConstraints prefWidth="10" />
+        <ColumnConstraints percentWidth="49" />
+    </columnConstraints>
+
+    <MenuBar GridPane.columnSpan="3">
+        <Menu text="File">
+            <MenuItem text="Frequently visited folders" onAction="#freqVisFoldersClicked" />
+            <SeparatorMenuItem />
+            <MenuItem text="Exit" onAction="#exitClicked" />
+        </Menu>
+        <Menu text="Edit">
+        </Menu>
+        <Menu text="OneDrive">
+        </Menu>
+        <Menu text="Help">
+        </Menu>
+    </MenuBar>
+
+    <FileTable fx:id="table1" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+    <Separator GridPane.rowIndex="1" GridPane.columnIndex="1" />
+    <FileTable fx:id="table2" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+
+</GridPane>
