@@ -1,9 +1,8 @@
 package ru.kpfu.ildar.pojos;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/** Represents a file/folder entity - here we'll be storing information about the element */
 public class FileBean
 {
     public enum Type { File, Folder };
@@ -24,6 +23,7 @@ public class FileBean
         this.lastChangedDate = lastChangedDate;
     }
 
+    /** Get name of the element */
     public String getName()
     {
         return name;
@@ -34,6 +34,7 @@ public class FileBean
         this.name = name;
     }
 
+    /** Get size of the element in bytes */
     public long getSize()
     {
         return size;
@@ -44,6 +45,7 @@ public class FileBean
         this.size = size;
     }
 
+    /** Get type of the element - whether it's a file, or a folder */
     public Type getType()
     {
         return type;
@@ -54,6 +56,7 @@ public class FileBean
         this.type = type;
     }
 
+    /** Get element creation date */
     public Date getCreationDate()
     {
         return creationDate;
@@ -64,6 +67,7 @@ public class FileBean
         this.creationDate = creationDate;
     }
 
+    /** Get element last modified date */
     public Date getLastChangedDate()
     {
         return lastChangedDate;

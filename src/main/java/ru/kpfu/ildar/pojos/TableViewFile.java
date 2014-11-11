@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/** A POJO-class that is used for binding elements data to the TableView instance */
 public class TableViewFile
 {
     private SimpleStringProperty fileName;
@@ -25,6 +26,7 @@ public class TableViewFile
         this.path = path;
     }
 
+    /** Get path to the file/folder */
     public String getPath()
     {
         return path;
@@ -34,6 +36,7 @@ public class TableViewFile
         this.path = path;
     }
 
+    /** Get file/folder name */
     public String getFileName()
     {
         return fileName.get();
@@ -44,6 +47,7 @@ public class TableViewFile
         this.fileName.set(fileName);
     }
 
+    /** Get file/folder size in bytes */
     public long getSize()
     {
         return size.get();
@@ -54,6 +58,7 @@ public class TableViewFile
         this.size.set(size);
     }
 
+    /** Get last modified date */
     public String getChangedDate()
     {
         return changedDate.get();
@@ -64,6 +69,7 @@ public class TableViewFile
         this.changedDate.set(changedDate);
     }
 
+    /** Get type of this element - whether it's a file, or a folder */
     public String getType()
     {
         return type.get();

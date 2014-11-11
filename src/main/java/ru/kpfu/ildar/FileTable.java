@@ -30,12 +30,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
+/** Represents a controller for FileTable.fxml; FileTable is a control with a files/folders table and
+ * some buttons to operate with files and folders. */
 public class FileTable extends VBox
 {
+    /** Stage of the main window */
     public static Stage stage;
 
+    /** Table where files are placed */
     @FXML
     private TableView<TableViewFile> filesView;
+    /** Path will be specified here */
     @FXML
     private TextField pathField;
 
@@ -69,18 +74,26 @@ public class FileTable extends VBox
     @FXML
     public Button openElemBtn;
 
-
+    /** Current elements are stored in this list */
     private ObservableList<TableViewFile> filesList = FXCollections.observableArrayList();
+    /** Current opened path */
     private String currPath;
 
+    //These three fields are for copy/cut functions
+    /** If true, that a copy button was clicked, otherwise a cut button. */
     private boolean copyOrCut;
+    /** Path to the file that was copied/cut */
     private String fileCopyCutPath;
+    /** File that was copied/cut represented in the table */
     private TableViewFile fileCopyCut;
 
+    /** Controller of the main window; instance is used to communicate with it */
     private Controller controller;
     private FileSystemSource filesSource;
 
+    /** Stack where previous links are stored */
     private Stack<String> prevStack = new Stack<>();
+    /** Stack where next accessed links are stored */
     private Stack<String> nextStack = new Stack<>();
 
     public FileTable()
@@ -93,10 +106,11 @@ public class FileTable extends VBox
         try { loader.load(); }
         catch (IOException exc) { throw new RuntimeException(exc); }
 
-        setCellValueFactory();
-        setCellFactoryForSize();
-        setCellFactoryForName();
+        setCellValueFactory();  //Link columns to the TableView instance
+        setCellFactoryForSize(); //Cell factory for correct formatting in the 'size' column
+        setCellFactoryForName(); //Cell factory for correct formatting in the 'name' column
 
+        //Disable some buttons that are used only on selected table items
         filesView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) ->
         {
             boolean isNull = newVal == null;
@@ -112,13 +126,14 @@ public class FileTable extends VBox
         VBox.setVgrow(filesView, Priority.ALWAYS);
     }
 
+    /** 'Create new element' button clicked */
     @FXML
     private void createNewBtnClicked(ActionEvent evt)
     {
         CreateNewElementDialog dialog = new CreateNewElementDialog
                 (stage, "Create new element", currPath, filesSource);
         Action result = dialog.showDialog();
-        if(result == dialog.getSubmitAction())
+        if(result == dialog.getSubmitAction())  //If user submitted file creation
         {
             String path = currPath + File.separator + dialog.getName();
             try
@@ -138,6 +153,7 @@ public class FileTable extends VBox
             filesList.add(file);
             filesView.getSelectionModel().select(file);
 
+            //Open this element if user has chosen so
             if(dialog.toOpenWhenCreated())
             {
                 try { filesSource.openFile(dialog.getName(), currPath); }
@@ -150,18 +166,22 @@ public class FileTable extends VBox
         }
     }
 
+    /** If some key was pressed on the table */
     @FXML
     private void filesViewKeyPressed(KeyEvent evt)
     {
+        //If enter, than open the item
         if(evt.getCode() == KeyCode.ENTER || evt.getCode() == KeyCode.SPACE)
         {
             openSelectedItem();
         }
+        ///If backspace then go to the previous link
         else if(evt.getCode() == KeyCode.BACK_SPACE)
         {
             if(!prevBtn.isDisable())
                 prevBtnClicked(null);
         }
+        //If delete button then delete the element
         else if(evt.getCode() == KeyCode.DELETE)
         {
             if(!deleteBtn.isDisable())
@@ -169,6 +189,7 @@ public class FileTable extends VBox
         }
     }
 
+    /** Open the element that was selected in the table */
     private void openSelectedItem()
     {
         TableViewFile file = filesView.getSelectionModel().getSelectedItem();
@@ -199,6 +220,7 @@ public class FileTable extends VBox
                 return;
             }
 
+            //currPath will be null when the last items access was search of items
             if(prevPath != null)
             {
                 prevStack.push(prevPath);
@@ -210,6 +232,7 @@ public class FileTable extends VBox
         }
     }
 
+    /** Open the selected element */
     @FXML
     private void openElemBtnClicked(ActionEvent evt)
     {
@@ -225,6 +248,7 @@ public class FileTable extends VBox
         }
     }
 
+    /** Mouse click was made on the table */
     @FXML
     private void filesViewMouseClicked(MouseEvent evt)
     {
@@ -245,6 +269,7 @@ public class FileTable extends VBox
         this.filesSource = filesSource;
     }
 
+    /** Set cell factory for 'name' column */
     private void setCellFactoryForName()
     {
         Callback<TableColumn<TableViewFile, String>, TableCell<TableViewFile, String>> callback =
@@ -265,6 +290,7 @@ public class FileTable extends VBox
                                     return;
                                 }
 
+                                //'Name' columns cells will have an icon and a name of the file
                                 Label label = new Label(name);
                                 TableViewFile file = filesList.stream().filter((f) -> f.getFileName()
                                         .equals(name)).findAny().get();
@@ -281,6 +307,7 @@ public class FileTable extends VBox
         nameCol.setCellFactory(callback);
     }
 
+    /** Set cell factory for 'size' column */
     private void setCellFactoryForSize()
     {
         Callback<TableColumn<TableViewFile, Long>, TableCell<TableViewFile, Long>> callback =
@@ -301,11 +328,14 @@ public class FileTable extends VBox
                             return;
                         }
 
+                        //Convert size in kilobytes
                         double kbs = floor((double) bytes / 1024);
                         if(kbs / 1024 > 1.0)
                         {
+                            //If size is more than one megabyte, convert it to MBs
                             double mbs = kbs / 1024;
                             if(mbs / 1024 > 1.0)
+                                //If size is more than one gigabyte, convert it to GBs
                                 setGraphic(new Label(floor(mbs / 1024) + " GBs"));
                             else
                                 setGraphic(new Label(floor(mbs) + " MBs"));
@@ -323,7 +353,8 @@ public class FileTable extends VBox
         };
         sizeCol.setCellFactory(callback);
     }
-    
+
+    /** Map properties of the TableViewFile class to the respective columns */
     private void setCellValueFactory()
     {
         nameCol.setCellValueFactory(new PropertyValueFactory<>("fileName"));
@@ -332,6 +363,7 @@ public class FileTable extends VBox
         typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
     }
 
+    /** Set new current folder and items */
     private void setCurrFolder(String path) throws IllegalAccessException, FileNotFoundException
     {
         List<FileBean> files = filesSource.getElements(path);
@@ -347,6 +379,7 @@ public class FileTable extends VBox
         pathField.setText(currPath);
     }
 
+    /** 'Copy element' button clicked */
     @FXML
     private void copyClicked(ActionEvent evt)
     {
@@ -358,6 +391,7 @@ public class FileTable extends VBox
 
     private String cutFromPath;
 
+    /** 'Cut element' button clicked */
     @FXML
     private void cutClicked(ActionEvent evt)
     {
@@ -368,6 +402,7 @@ public class FileTable extends VBox
         controller.copiedOrCut(copyOrCut, file, currPath, this);
     }
 
+    /** 'Paste an element' button clicked */
     @FXML
     private void pasteClicked(ActionEvent evt)
     {
@@ -379,7 +414,7 @@ public class FileTable extends VBox
         try
         {
             filesSource.copyElement(fileCopyCutPath, currPath);
-            if(copyOrCut == false)
+            if(copyOrCut == false) //If it was a cut, then delete a file from its first path
                 filesSource.deleteElement(fileCopyCutPath);
 
             pasteBtn.setDisable(true);
@@ -391,6 +426,7 @@ public class FileTable extends VBox
 
     public void disablePasteBtn() { pasteBtn.setDisable(true); }
 
+    /** 'Delete an element' button clicked */
     @FXML
     private void deleteClicked(ActionEvent evt)
     {
@@ -408,6 +444,7 @@ public class FileTable extends VBox
         catch(Exception exc) { exc.printStackTrace(); }
     }
 
+    /** 'Open the specified path' button clicked */
     @FXML
     private void openPathClicked(ActionEvent evt)
     {
@@ -424,6 +461,7 @@ public class FileTable extends VBox
             return;
         }
 
+        //If the same path as current path was entered, do not put in into previous paths stack
         if(!currPath.equals(enteredText))
         {
             prevStack.push(currPath);
@@ -434,6 +472,7 @@ public class FileTable extends VBox
         }
     }
 
+    /** 'Previous path' button clicked */
     @FXML
     private void prevBtnClicked(ActionEvent evt)
     {
@@ -460,6 +499,7 @@ public class FileTable extends VBox
             prevBtn.setDisable(true);
     }
 
+    /** 'Next path' button clicked */
     @FXML
     private void nextBtnClicked(ActionEvent evt)
     {
@@ -486,6 +526,8 @@ public class FileTable extends VBox
             nextBtn.setDisable(true);
     }
 
+    /** 'Search of files/folders' button clicked. Search will be made in the current folder and
+     * in the subfolders of it */
     @FXML
     private void searchClicked(ActionEvent evt)
     {
@@ -514,6 +556,7 @@ public class FileTable extends VBox
         }
     }
 
+    /** Search recursively in subfolders */
     private void search(String name, String path, List<TableViewFile> result) throws Exception
     {
         List<FileBean> files = filesSource.getElements(path);
@@ -529,6 +572,7 @@ public class FileTable extends VBox
         }
     }
 
+    /** Set the current folder and load its elements */
     public void init(String currFolder)
     {
         try { setCurrFolder(currFolder); }
@@ -564,6 +608,7 @@ public class FileTable extends VBox
                 .showError();
     }
 
+    /** There was a copy/cut made in another table */
     public void copiedOrCut(boolean copied, TableViewFile file, String filePath)
     {
         this.copyOrCut = copied;
@@ -573,6 +618,7 @@ public class FileTable extends VBox
         pasteBtn.setDisable(false);
     }
 
+    /** There was a paste made in another table */
     public void pasted()
     {
         if(currPath.equals(cutFromPath))

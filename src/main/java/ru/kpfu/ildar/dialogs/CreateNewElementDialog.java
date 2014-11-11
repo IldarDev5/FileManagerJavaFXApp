@@ -15,14 +15,21 @@ import ru.kpfu.ildar.filessource.FileSystemSource;
 
 import java.io.File;
 
+/** Dialog where user can create a file or folder */
 public class CreateNewElementDialog extends Dialog
 {
+    /** Action to submit creation */
     private Action submitAction;
+    /** Open a file/folder after creation */
     private boolean openWhenCreated;
+    /** If the created element is a file, then true */
     private boolean isFile = true;
+    /** Name of the file/folder to create */
     private String name;
 
+    /** Files/folders source */
     private FileSystemSource source;
+    /** Creation path */
     private String currPath;
 
     public Action getSubmitAction() { return submitAction; }
@@ -44,6 +51,7 @@ public class CreateNewElementDialog extends Dialog
         GridPane root = new GridPane();
         root.setHgap(10); root.setVgap(10);
 
+        //User can choose what to create - file or folder
         ToggleGroup group = new ToggleGroup();
         RadioButton createFile = new RadioButton("Create file");
         createFile.setId("file");
@@ -70,11 +78,13 @@ public class CreateNewElementDialog extends Dialog
 
         root.getColumnConstraints().add(new ColumnConstraints(200));
 
+        //User can choose to open a file/folder after creation or not
         openBox.selectedProperty().addListener((obs, oldVal, newVal) -> openWhenCreated = newVal);
 
         group.selectedToggleProperty().addListener((obs, oldVal, newVal) ->
         {
             String id = ((RadioButton)newVal).getId();
+            //Changing labels accordingly to choice
             if(id.equals("file"))
             {
                 enterLabel.setText("Enter name of the file to create:");
@@ -103,6 +113,8 @@ public class CreateNewElementDialog extends Dialog
 
         nameField.textProperty().addListener((obs, oldVal, newVal) ->
         {
+            //Put some constraints on possible file/folder name
+            // - it mustn't be empty and there mustn't be already such file/folder in this folder
             if(newVal.equals(""))
             {
                 errLabel.setText("Name mustn't be empty");

@@ -13,13 +13,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/** Represents a controller for MainWindow.fxml */
 public class Controller implements Initializable
 {
+    /** First files table */
     @FXML
     private FileTable table1;
+    /** Second files table */
     @FXML
     private FileTable table2;
 
+    /** Source of files/folders information */
     private FileSystemSource filesSource = new FileSystemSource();
 
     private List<FileTable> tables;
@@ -40,8 +44,10 @@ public class Controller implements Initializable
         Dialog.Actions.CANCEL.textProperty().set("Cancel");
     }
 
+    /** Files table where an element cut was made */
     private FileTable cutFileTable;
 
+    /** A table indicates that there was a copy or cut made in its files; notify other tables */
     public void copiedOrCut(boolean copied, TableViewFile file, String filePath, FileTable caller)
     {
         for(FileTable table : tables)
@@ -51,6 +57,7 @@ public class Controller implements Initializable
             cutFileTable = caller;
     }
 
+    /** A table indicates that there was a paste made of the previously cut file; notify other tables */
     public void pasted()
     {
         if(cutFileTable != null)

@@ -8,12 +8,18 @@ import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
+/** Utility class that helps in some cases */
 public class FXUtils
 {
     private static Image folderImage = null;
 
+    /**
+     * Get an icon image of the file with the specified extension, or of folder
+     * @param extension File's extension
+     * @param path Path to the element(full, including element's name)
+     * @return Instance of javafx.scene.image.Image that represents this folder
+     */
     public static Image getFXImage(String extension, String path)
     {
         File file = new File(path);
