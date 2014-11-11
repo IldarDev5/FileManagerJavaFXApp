@@ -1,36 +1,28 @@
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.Menu?>
-<?import javafx.scene.layout.HBox?>
 <?import ru.kpfu.ildar.FileTable?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.SplitPane?>
 <GridPane xmlns:fx="http://javafx.com/fxml" fx:controller="ru.kpfu.ildar.Controller"
         hgap="10" vgap="10">
-    <columnConstraints>
-        <ColumnConstraints percentWidth="49" />
-        <ColumnConstraints prefWidth="10" />
-        <ColumnConstraints percentWidth="49" />
-    </columnConstraints>
+    <padding><Insets bottom="10" /></padding>
 
-    <MenuBar GridPane.columnSpan="3">
+    <MenuBar GridPane.hgrow="ALWAYS">
         <Menu text="File">
-            <MenuItem text="Frequently visited folders" onAction="#freqVisFoldersClicked" />
-            <SeparatorMenuItem />
             <MenuItem text="Exit" onAction="#exitClicked" />
         </Menu>
-        <Menu text="Edit">
-        </Menu>
-        <Menu text="OneDrive">
-        </Menu>
         <Menu text="Help">
+            <MenuItem text="About" />
         </Menu>
     </MenuBar>
 
-    <FileTable fx:id="table1" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-    <Separator GridPane.rowIndex="1" GridPane.columnIndex="1" />
-    <FileTable fx:id="table2" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+    <SplitPane GridPane.rowIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"
+            dividerPositions="0.5">
+        <FileTable fx:id="table1" />
+        <FileTable fx:id="table2" />
+    </SplitPane>
 
 </GridPane>

@@ -1,6 +1,6 @@
 package ru.kpfu.ildar.pojos;
 
-import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.text.SimpleDateFormat;
@@ -9,18 +9,29 @@ import java.util.Date;
 public class TableViewFile
 {
     private SimpleStringProperty fileName;
-    private SimpleDoubleProperty size;
+    private SimpleLongProperty size;
     private SimpleStringProperty changedDate;
     private SimpleStringProperty type;
+    private String path;
 
     public TableViewFile() { }
-    public TableViewFile(String fileName, double size, Date changedDate, String type)
+    public TableViewFile(String fileName, long size, Date changedDate, String type, String path)
     {
         this.fileName = new SimpleStringProperty(fileName);
-        this.size = new SimpleDoubleProperty(size);
-        SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        this.size = new SimpleLongProperty(size);
+        SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy kk:mm");
         this.changedDate = new SimpleStringProperty(fmt.format(changedDate));
         this.type = new SimpleStringProperty(type);
+        this.path = path;
+    }
+
+    public String getPath()
+    {
+        return path;
+    }
+    public void setPath(String path)
+    {
+        this.path = path;
     }
 
     public String getFileName()
@@ -33,12 +44,12 @@ public class TableViewFile
         this.fileName.set(fileName);
     }
 
-    public double getSize()
+    public long getSize()
     {
         return size.get();
     }
 
-    public void setSize(double size)
+    public void setSize(long size)
     {
         this.size.set(size);
     }

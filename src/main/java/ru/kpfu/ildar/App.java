@@ -16,9 +16,11 @@ public class App extends Application
     @Override
     public void start(Stage stage) throws Exception
     {
+        FileTable.stage = stage;
         stage.setTitle("Ildar's File Manager");
 
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("MainWindow.fxml"));
-        stage.setScene(new Scene(root));
+        stage.setScene(new Scene(root, 1000, 600));
+        stage.show();
     }
 }

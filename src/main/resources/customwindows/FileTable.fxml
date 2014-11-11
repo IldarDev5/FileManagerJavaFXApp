@@ -2,22 +2,116 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.Label?>
 <fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml" spacing="10">
     <HBox spacing="10">
-        <Button onAction="#prevBtnClicked" />
-        <Button onAction="#nextBtnClicked" />
-        <Text fx:id="pathText" />
-        <Button text="Search..." onAction="#searchClicked" />
+        <Button fx:id="prevBtn" onAction="#prevBtnClicked" disable="true">
+            <tooltip><Tooltip text="Previous opened folder" /></tooltip>
+            <graphic>
+                <ImageView preserveRatio="true" pickOnBounds="true" fitHeight="24" fitWidth="24">
+                    <image>
+                        <Image url="images/prev.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="nextBtn" onAction="#nextBtnClicked" disable="true">
+            <tooltip><Tooltip text="Next opened folder" /></tooltip>
+            <graphic>
+                <ImageView preserveRatio="true" pickOnBounds="true" fitHeight="24" fitWidth="24">
+                    <image>
+                        <Image url="images/next.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <TextField fx:id="pathField" />
+        <Button text="OK" onAction="#openPathClicked">
+            <tooltip><Tooltip text="Open entered folder" /></tooltip>
+        </Button>
+        <Button fx:id="searchBtn" text="Search..." onAction="#searchClicked">
+            <tooltip><Tooltip text="Search for elements in this folder" /></tooltip>
+        </Button>
     </HBox>
     <HBox spacing="10">
-        <Button fx:id="copyBtn" />
-        <Button fx:id="pasteBtn" />
-        <Button fx:id="deleteBtn" />
-        <Button fx:id="propsBtn" />
-        <Button fx:id="createNewBtn" />
+        <Button fx:id="copyBtn" onAction="#copyClicked" disable="true">
+            <tooltip><Tooltip text="Copy element" /></tooltip>
+            <graphic>
+                <ImageView fitWidth="24" fitHeight="24" preserveRatio="true" pickOnBounds="true">
+                    <image>
+                        <Image url="images/copy.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="cutBtn" onAction="#cutClicked" disable="true">
+            <tooltip><Tooltip text="Cut element" /></tooltip>
+            <graphic>
+                <ImageView fitWidth="24" fitHeight="24" preserveRatio="true" pickOnBounds="true">
+                    <image>
+                        <Image url="images/cut.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="pasteBtn" onAction="#pasteClicked" disable="true">
+            <tooltip><Tooltip text="Paste element" /></tooltip>
+            <graphic>
+                <ImageView fitWidth="24" fitHeight="24" preserveRatio="true" pickOnBounds="true">
+                    <image>
+                        <Image url="images/paste.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="deleteBtn" onAction="#deleteClicked" disable="true">
+            <tooltip><Tooltip text="Delete element" /></tooltip>
+            <graphic>
+                <ImageView fitWidth="24" fitHeight="24" preserveRatio="true" pickOnBounds="true">
+                    <image>
+                        <Image url="images/delete.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="propsBtn" disable="true">
+            <tooltip><Tooltip text="Element properties" /></tooltip>
+            <graphic>
+                <ImageView fitWidth="24" fitHeight="24" preserveRatio="true" pickOnBounds="true">
+                    <image>
+                        <Image url="images/props.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="createNewBtn" onAction="#createNewBtnClicked">
+            <tooltip><Tooltip text="Create new element" /></tooltip>
+            <graphic>
+                <ImageView fitWidth="24" fitHeight="24" preserveRatio="true" pickOnBounds="true">
+                    <image>
+                        <Image url="images/create.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="openElemBtn" onAction="#openElemBtnClicked">
+            <tooltip><Tooltip text="Open an element in the file system" /></tooltip>
+            <graphic>
+                <ImageView fitHeight="24" fitWidth="24" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="images/open.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
     </HBox>
-    <TableView fx:id="filesView">
+    <TableView fx:id="filesView" onMouseClicked="#filesViewMouseClicked"
+            onKeyPressed="#filesViewKeyPressed">
+        <placeholder><Label text="The folder is empty" /></placeholder>
         <columns>
             <TableColumn text="Name" fx:id="nameCol" />
             <TableColumn text="Size" fx:id="sizeCol" />
